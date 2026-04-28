@@ -2,7 +2,7 @@ version: 0.2
 
 env:
   variables:
-    S3_BUCKET: my-buildright-frontend-bucket-12345
+    S3_BUCKET: my-buildright-frontend-pournima-12345
 
 phases:
   install:
