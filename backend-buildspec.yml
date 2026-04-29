@@ -10,17 +10,17 @@ phases:
   build:
     commands:
       - echo Building Spring Boot application...
-      # Change directory within the build phase before running Maven
       - cd backend
       - mvn clean package -DskipTests
 
   post_build:
     commands:
       - echo Preparing deployment package...
-      # CodeBuild automatically starts this phase in the source root
-      # Create the package directory inside the root
       - mkdir package
-      - cp backend/target/*.jar package/
+      
+      # Target the exact finalName specified in your pom.xml
+      - cp backend/target/buildright-app.jar package/
+      
       - cp appspec.yml package/
       - cp -r scripts package/
 
