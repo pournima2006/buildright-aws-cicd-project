@@ -15,10 +15,16 @@ phases:
 
   post_build:
     commands:
-      - echo Backend build completed
+      - echo Preparing deployment package...
+      - cd ..
+      - mkdir package
+      - cp backend/target/*.jar package/
+      - cp appspec.yml package/
+      - cp -r scripts package/
 
 artifacts:
+  base-directory: package
   files:
-    - backend/target/*.jar
-    - appspec.yml
-    - scripts/**/*
+    - '**/*'
+  name: buildright-backend.zip
+  packaging: zip
