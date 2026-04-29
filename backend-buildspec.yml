@@ -15,14 +15,28 @@ phases:
 
   post_build:
     commands:
+      - echo "--- DIAGNOSTIC MODE: Checking Root Directory ---"
+      - ls -la
+      
+      - echo "--- DIAGNOSTIC MODE: Checking Target Directory ---"
+      - ls -la backend/target/ || echo "TARGET DIRECTORY MISSING!"
+      
       - echo Preparing deployment package...
       - mkdir package
       
-      # Target the exact finalName specified in your pom.xml
-      - cp backend/target/buildright-app.jar package/
+      # The "|| true" forces CodeBuild to continue even if the command fails, 
+      # allowing us to see the exact error in the logs without stopping the pipeline.
+      - echo "Copying JAR..."
+      - cp backend/target/buildright-app.jar package/ || echo ">>> ERROR: FAILED TO COPY JAR"
       
-      - cp appspec.yml package/
-      - cp -r scripts package/
+      - echo "Copying appspec.yml..."
+      - cp appspec.yml package/ || echo ">>> ERROR: FAILED TO COPY APPSPEC.YML"
+      
+      - echo "Copying scripts folder..."
+      - cp -r scripts package/ || echo ">>> ERROR: FAILED TO COPY SCRIPTS FOLDER"
+      
+      - echo "--- DIAGNOSTIC MODE: Checking Final Package Contents ---"
+      - ls -la package/
 
 artifacts:
   base-directory: package
